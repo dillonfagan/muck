@@ -15,6 +15,12 @@ get "/" do |env|
   stash.stores.to_json
 end
 
+put "/" do |env|
+  store = env.params.json["store"].as(String)
+  stash.add_store store
+  stash.stores.to_json
+end
+
 get "/:store" do |env|
   store = env.params.url["store"]
   stash.in(store).get_all.to_json
