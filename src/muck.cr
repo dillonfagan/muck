@@ -1,14 +1,7 @@
 require "kemal"
 require "json"
 require "./entry"
-
-class DeleteMessage
-  include JSON::Serializable
-  property deleted : Entry?
-
-  def initialize(@deleted : Entry?)
-  end
-end
+require "./delete_message"
 
 store = Hash(String, String).new
 
