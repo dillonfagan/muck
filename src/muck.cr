@@ -1,8 +1,7 @@
 require "kemal"
 require "json"
 require "./entry"
-require "./patch_message"
-require "./delete_message"
+require "./message"
 
 store = Hash(String, String).new
 
@@ -35,13 +34,13 @@ patch "/:key" do |env|
   store[key] = env.params.json["value"].as(String)
   after = Entry.new(key, store[key])
 
-  PatchMessage.new(before, after).to_json
+  Message::Patch.new(before, after).to_json
 end
 
 delete "/:key" do |env|
   key = env.params.url["key"]
   entry = remove_entry store, key
-  DeleteMessage.new(entry).to_json
+  Message::Delete.new(entry).to_json
 end
 
 def remove_entry(store : Hash(String, String), key : String) : Entry | Nil
