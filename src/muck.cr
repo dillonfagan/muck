@@ -5,9 +5,6 @@ require "./message"
 
 store = Hash(String, String).new
 
-store["username"] = "bob"
-store["password"] = "Pa$$w0rd"
-
 before_all do |env|
   env.response.content_type = "application/json"
 end
