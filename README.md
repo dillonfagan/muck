@@ -1,10 +1,10 @@
-# muck
+# Muck
 
-TODO: Write a description here
+A simple key-value database with a REST API.
 
 ## Installation
 
-TODO: Write installation instructions here
+Install crystal, clone the repo, and run `shards install` from the project folder.
 
 ## Usage
 
