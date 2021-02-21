@@ -18,4 +18,11 @@ class Stash
     def add_store(store : String)
         @stash[store] = Store.new
     end
+
+    def rename_store(store : String, new_name : String) : Store
+        swap = @stash[store]
+        @stash.delete store
+        @stash[new_name] = swap
+        return @stash[new_name]
+    end
 end

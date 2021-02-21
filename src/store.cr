@@ -1,6 +1,8 @@
+require "json"
 require "./entry"
 
 class Store
+    include JSON::Serializable
     @entries : Hash(String, String)
 
     def initialize

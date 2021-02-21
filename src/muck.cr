@@ -38,6 +38,12 @@ put "/:store" do |env|
   stash.in(store).add(entry).to_json
 end
 
+patch "/:store" do |env|
+  store = env.params.url["store"]
+  new_name = env.params.json["store"].as(String)
+  stash.rename_store(store, new_name).to_json
+end
+
 patch "/:store/:key" do |env|
   store = env.params.url["store"]
   key = env.params.url["key"]
