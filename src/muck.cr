@@ -2,6 +2,14 @@ require "kemal"
 require "json"
 require "./entry"
 
+class DeleteMessage
+  include JSON::Serializable
+  property deleted : Entry?
+
+  def initialize(@deleted : Entry?)
+  end
+end
+
 store = Hash(String, String).new
 
 store["username"] = "bob"
@@ -32,6 +40,20 @@ patch "/:key" do |env|
 
   env.response.content_type = "application/json"
   Entry.new(key, store[key]).to_json
+end
+
+delete "/:key" do |env|
+  key = env.params.url["key"]
+  entry = remove_entry store, key
+
+  env.response.content_type = "application/json"
+  DeleteMessage.new(entry).to_json
+end
+
+def remove_entry(store : Hash(String, String), key : String) : Entry | Nil
+  value = store.delete key
+  return nil if value.nil?
+  return Entry.new(key, value.as(String))
 end
 
 Kemal.run
