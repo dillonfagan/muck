@@ -15,6 +15,8 @@ end
 put "/" do |env|
   entry = Entry.from_json env.request.body.not_nil!
   store[entry.key] = entry.value
+
+  env.response.content_type = "application/json"
   entry.to_json
 end
 
