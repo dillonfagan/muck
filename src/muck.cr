@@ -54,6 +54,11 @@ patch "/:store/:key" do |env|
   Message::Patch.new(before, after).to_json
 end
 
+delete "/:store" do |env|
+  store = env.params.url["store"]
+  stash.delete_store(store).to_json
+end
+
 delete "/:store/:key" do |env|
   store = env.params.url["store"]
   key = env.params.url["key"]

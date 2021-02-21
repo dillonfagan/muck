@@ -25,4 +25,8 @@ class Stash
         @stash[new_name] = swap
         return @stash[new_name]
     end
+
+    def delete_store(store : String) : Store
+        return @stash.delete(store).as(Store)
+    end
 end
