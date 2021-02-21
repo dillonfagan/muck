@@ -21,6 +21,11 @@ get "/stash" do |env|
   stash.stores.to_json
 end
 
+get "/stash/:name" do |env|
+  name = env.params.url["name"]
+  stash.in(name).get_all.to_json
+end
+
 get "/:key" do |env|
   key = env.params.url["key"]
   stash.in(DEF).get(key).to_json
