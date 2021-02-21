@@ -12,6 +12,12 @@ get "/" do |env|
   store.to_json
 end
 
+get "/:key" do |env|
+  key = env.params.url["key"]
+  env.response.content_type = "application/json"
+  Entry.new(key, store[key]).to_json
+end
+
 put "/" do |env|
   entry = Entry.from_json env.request.body.not_nil!
   store[entry.key] = entry.value
