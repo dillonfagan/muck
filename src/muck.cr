@@ -4,49 +4,48 @@ require "./entry"
 require "./message"
 require "./stash"
 
-DEF = "default"
-
 stash = Stash.new
-stash.create DEF
+stash.add_store "default"
 
 before_all do |env|
   env.response.content_type = "application/json"
 end
 
 get "/" do |env|
-  stash.in(DEF).get_all.to_json
-end
-
-get "/stash" do |env|
   stash.stores.to_json
 end
 
-get "/stash/:name" do |env|
-  name = env.params.url["name"]
-  stash.in(name).get_all.to_json
+get "/:stash" do |env|
+  stash_name = env.params.url["stash"]
+  stash.in(stash_name).get_all.to_json
 end
 
-get "/:key" do |env|
+get "/:stash/:key" do |env|
+  stash_name = env.params.url["stash"]
   key = env.params.url["key"]
-  stash.in(DEF).get(key).to_json
+  stash.in(stash_name).get(key).to_json
 end
 
-put "/" do |env|
+put "/:stash" do |env|
+  stash_name = env.params.url["stash"]
   entry = Entry.from_json env.request.body.not_nil!
-  stash.in(DEF).add(entry).to_json
+  stash.in(stash_name).add(entry).to_json
 end
 
-patch "/:key" do |env|
+patch "/:stash/:key" do |env|
+  stash_name = env.params.url["stash"]
   key = env.params.url["key"]
   value = env.params.json["value"].as(String)
-  before = stash.in(DEF).update key, value
-  after = stash.in(DEF).get key
+
+  before = stash.in(stash_name).update key, value
+  after = stash.in(stash_name).get key
   Message::Patch.new(before, after).to_json
 end
 
-delete "/:key" do |env|
+delete "/:stash/:key" do |env|
+  stash_name = env.params.url["stash"]
   key = env.params.url["key"]
-  entry = stash.in(DEF).delete key
+  entry = stash.in(stash_name).delete key
   Message::Delete.new(entry).to_json
 end
 

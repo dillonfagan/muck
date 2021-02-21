@@ -15,7 +15,7 @@ class Stash
         return @stash[store]
     end
 
-    def create(store : String)
+    def add_store(store : String)
         @stash[store] = Store.new
     end
 end
