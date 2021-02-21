@@ -1,6 +1,7 @@
 require "kemal"
 require "json"
 require "./entry"
+require "./patch_message"
 require "./delete_message"
 
 store = Hash(String, String).new
@@ -8,7 +9,7 @@ store = Hash(String, String).new
 store["username"] = "bob"
 store["password"] = "Pa$$w0rd"
 
-before_all "/" do |env|
+before_all do |env|
   env.response.content_type = "application/json"
 end
 
@@ -29,8 +30,12 @@ end
 
 patch "/:key" do |env|
   key = env.params.url["key"]
+
+  before = Entry.new(key, store[key])
   store[key] = env.params.json["value"].as(String)
-  Entry.new(key, store[key]).to_json
+  after = Entry.new(key, store[key])
+
+  PatchMessage.new(before, after).to_json
 end
 
 delete "/:key" do |env|
