@@ -26,4 +26,12 @@ put "/" do |env|
   entry.to_json
 end
 
+patch "/:key" do |env|
+  key = env.params.url["key"]
+  store[key] = env.params.json["value"].as(String)
+
+  env.response.content_type = "application/json"
+  Entry.new(key, store[key]).to_json
+end
+
 Kemal.run
