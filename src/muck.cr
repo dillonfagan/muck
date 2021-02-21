@@ -15,38 +15,34 @@ store = Hash(String, String).new
 store["username"] = "bob"
 store["password"] = "Pa$$w0rd"
 
-get "/" do |env|
+before_all "/" do |env|
   env.response.content_type = "application/json"
+end
+
+get "/" do |env|
   store.to_json
 end
 
 get "/:key" do |env|
   key = env.params.url["key"]
-  env.response.content_type = "application/json"
   Entry.new(key, store[key]).to_json
 end
 
 put "/" do |env|
   entry = Entry.from_json env.request.body.not_nil!
   store[entry.key] = entry.value
-
-  env.response.content_type = "application/json"
   entry.to_json
 end
 
 patch "/:key" do |env|
   key = env.params.url["key"]
   store[key] = env.params.json["value"].as(String)
-
-  env.response.content_type = "application/json"
   Entry.new(key, store[key]).to_json
 end
 
 delete "/:key" do |env|
   key = env.params.url["key"]
   entry = remove_entry store, key
-
-  env.response.content_type = "application/json"
   DeleteMessage.new(entry).to_json
 end
 
