@@ -1,16 +1,10 @@
 require "./entry"
 
 class Store
-    @@instance : Store?
     @entries : Hash(String, String)
 
-    protected def initialize
+    def initialize
         @entries = Hash(String, String).new
-    end
-
-    def self.instance : Store
-        @@instance = Store.new if @@instance.nil?
-        return @@instance.as(Store)
     end
 
     def get_all : Hash(String, String)
