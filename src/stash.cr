@@ -7,6 +7,10 @@ class Stash
         @stash = Hash(String, Store).new
     end
 
+    def stores
+        return @stash.keys
+    end
+
     def in(store : String) : Store
         return @stash[store]
     end
