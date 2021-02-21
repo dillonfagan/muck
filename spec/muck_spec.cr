@@ -1,9 +1,8 @@
 require "./spec_helper"
 
-describe Muck do
-  # TODO: Write tests
-
-  it "works" do
-    false.should eq(true)
+describe "Muck" do
+  it "GET / returns default store" do
+    get "/"
+    response.body.should eq "[\"default\"]"
   end
 end
